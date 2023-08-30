@@ -12,7 +12,9 @@ import java.util.List;
 import java.util.Set;
 
 public class BasePage {
-    /* Web Browser */
+    public static BasePage getBasePage(){
+        return new BasePage();
+    }
     public void openUrl(WebDriver driver, String url){
         driver.get(url);
     }
@@ -35,8 +37,7 @@ public class BasePage {
         driver.navigate().forward();
     }
     public Alert waitForAlertPresence(WebDriver driver){
-        WebDriverWait explicitWait = new WebDriverWait(driver, Duration.ofSeconds(30));
-        return explicitWait.until(ExpectedConditions.alertIsPresent());
+        return new WebDriverWait(driver, Duration.ofSeconds(longTimeout)).until(ExpectedConditions.alertIsPresent());
     }
     public void acceptAlert(WebDriver driver){
         waitForAlertPresence(driver).accept();
@@ -81,8 +82,6 @@ public class BasePage {
         driver.switchTo().window(parentPageID);
         sleepInSecond(1);
     }
-
-    /* Web Element */
     public By getByxPath(String xpathExpression){
         return By.xpath(xpathExpression);
     }
@@ -114,7 +113,7 @@ public class BasePage {
     public void selectItemInCustomDropdown(WebDriver driver, String parentLocator, String childItemLocator, String expectedItem){
         getWebElement(driver, parentLocator).click();
         sleepInSecond(1);
-        WebDriverWait explicitWait = new WebDriverWait(driver, Duration.ofSeconds(30));
+        WebDriverWait explicitWait = new WebDriverWait(driver, Duration.ofSeconds(longTimeout));
         List<WebElement> allItems = explicitWait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(getByxPath(childItemLocator)));
         for (WebElement item : allItems){
             if (item.getText().trim().equals(expectedItem)){
@@ -206,7 +205,7 @@ public class BasePage {
         ((JavascriptExecutor) driver).executeScript("arguments[0].removeAttribute('" + attributeRemove + "');", getWebElement(driver, xpathExpression));
     }
     public boolean areJQueryAndJSLoadedSucsess(WebDriver driver){
-        WebDriverWait explicitWait = new WebDriverWait(driver, Duration.ofSeconds(30));
+        WebDriverWait explicitWait = new WebDriverWait(driver, Duration.ofSeconds(longTimeout));
         ExpectedCondition<Boolean> jQueryLoad = new ExpectedCondition<Boolean>() {
             @Override
             public Boolean apply(WebDriver driver) {
@@ -233,10 +232,32 @@ public class BasePage {
             return false;
         }
     }
-
+    public void waitForElementVisible(WebDriver driver, String xpathExpression){
+        new WebDriverWait(driver, Duration.ofSeconds(longTimeout)).until(ExpectedConditions.visibilityOfElementLocated(getByxPath(xpathExpression)));
+    }
+    public void waitForElementClickable(WebDriver driver, String xpathExpression){
+        new WebDriverWait(driver, Duration.ofSeconds(longTimeout)).until(ExpectedConditions.elementToBeClickable(getByxPath(xpathExpression)));
+    }
+    public void waitForElementInvisible(WebDriver driver, String xpathExpression){
+        new WebDriverWait(driver, Duration.ofSeconds(longTimeout)).until(ExpectedConditions.invisibilityOfElementLocated(getByxPath(xpathExpression)));
+    }
+    public void waitForAllElementsVisible(WebDriver driver, String xpathExpression){
+        new WebDriverWait(driver, Duration.ofSeconds(longTimeout)).until(ExpectedConditions.visibilityOfAllElementsLocatedBy(getByxPath(xpathExpression)));
+    }
+    public void waitForAllElementsInvisible(WebDriver driver, String xpathEpression){
+        new WebDriverWait(driver, Duration.ofSeconds(longTimeout)).until(ExpectedConditions.invisibilityOfAllElements(getWebElements(driver,xpathEpression)));
+    }
+    private long longTimeout = 30;
     public void sleepInSecond(long timeoutInSecond){
         try {
             Thread.sleep(timeoutInSecond*1000);
+        } catch (InterruptedException e){
+            e.printStackTrace();
+        }
+    }
+    public void sleepInMillisecond(long timeoutInMillisecond){
+        try {
+            Thread.sleep(timeoutInMillisecond);
         } catch (InterruptedException e){
             e.printStackTrace();
         }

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="All Test Suite">
+    <test verbose="2" preserve-order="true" name="/Users/longpham/Desktop/SeleniumOnline29/03-JavaHybridFramework/hybrid-framework-nopcommerce">
+        <classes>
+            <class name="com.nopcommerce.user.Topic_01_Register_login">
+                <methods>
+                    <include name="TC_01_Register_Emply_Data"/>
+                    <include name="TC_02_Register_Invalid_Email"/>
+                </methods>
+            </class>
+            <class name="com.nopcommerce.user.Topic_02_Register_login">
+            </class>
+            <class name="com.nopcommerce.user.Topic_03_Register_login"/>
+        </classes>
+    </test>
+</suite>
