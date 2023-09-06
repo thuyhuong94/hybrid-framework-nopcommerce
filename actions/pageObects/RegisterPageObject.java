@@ -68,4 +68,12 @@ public class RegisterPageObject extends BasePage {
         waitForElementVisible(driver, RegisterPageUI.CONFIRM_PASSWORD_TEXTBOX);
         sendKeyToElement(driver,RegisterPageUI.CONFIRM_PASSWORD_TEXTBOX, confirmPassword);
     }
+    public void registerNewAccount(String firstName, String lastName, String email, String passWord){
+        sendkeyToFirstNameTextbox(firstName);
+        sendkeyToLastNameTextbox(lastName);
+        sendkeyToEmailTextbox(email);
+        sendkeyToPasswordTextbox(passWord);
+        sendkeyToConfirmPasswordTextbox(passWord);
+        clickToRegisterButton();
+    }
 }

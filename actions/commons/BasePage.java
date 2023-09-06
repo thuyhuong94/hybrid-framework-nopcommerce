@@ -6,6 +6,8 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import pageUIs.BasePageUI;
+import pageUIs.LogInPageUI;
 
 import java.time.Duration;
 import java.util.List;
@@ -93,6 +95,13 @@ public class BasePage {
     }
     public void clickToElement(WebDriver driver, String xpathExpression){
         getWebElement(driver,xpathExpression).click();
+    }
+    public String getDynamicXpath(String xpathExpression, String... values){
+        xpathExpression = String.format(xpathExpression, (Object[]) values);
+        return xpathExpression;
+    }
+    public void clickToElement(WebDriver driver, String xpathExpression, String... values){
+        getWebElement(driver,getDynamicXpath(xpathExpression,values)).click();
     }
     public void sendKeyToElement(WebDriver driver, String xpathExpression, String value){
         getWebElement(driver,xpathExpression).clear();
@@ -238,14 +247,21 @@ public class BasePage {
     public void waitForElementClickable(WebDriver driver, String xpathExpression){
         new WebDriverWait(driver, Duration.ofSeconds(longTimeout)).until(ExpectedConditions.elementToBeClickable(getByxPath(xpathExpression)));
     }
+    public void waitForElementClickable(WebDriver driver, String xpathExpression, String... values){
+        new WebDriverWait(driver,Duration.ofSeconds(longTimeout)).until(ExpectedConditions.elementToBeClickable(getByxPath(getDynamicXpath(xpathExpression,values))));
+    }
     public void waitForElementInvisible(WebDriver driver, String xpathExpression){
         new WebDriverWait(driver, Duration.ofSeconds(longTimeout)).until(ExpectedConditions.invisibilityOfElementLocated(getByxPath(xpathExpression)));
     }
     public void waitForAllElementsVisible(WebDriver driver, String xpathExpression){
         new WebDriverWait(driver, Duration.ofSeconds(longTimeout)).until(ExpectedConditions.visibilityOfAllElementsLocatedBy(getByxPath(xpathExpression)));
     }
-    public void waitForAllElementsInvisible(WebDriver driver, String xpathEpression){
-        new WebDriverWait(driver, Duration.ofSeconds(longTimeout)).until(ExpectedConditions.invisibilityOfAllElements(getWebElements(driver,xpathEpression)));
+    public void waitForAllElementsInvisible(WebDriver driver, String xpathExpression){
+        new WebDriverWait(driver, Duration.ofSeconds(longTimeout)).until(ExpectedConditions.invisibilityOfAllElements(getWebElements(driver,xpathExpression)));
+    }
+    public void openPageAtMyAccountByPageName(WebDriver driver, String... values){
+        waitForElementClickable(driver, BasePageUI.DYNAMIC_PAGES_AT_MYACCOUNT_AREA, values);
+        clickToElement(driver,BasePageUI.DYNAMIC_PAGES_AT_MYACCOUNT_AREA, values);
     }
     private long longTimeout = 30;
     public void sleepInSecond(long timeoutInSecond){
