@@ -90,8 +90,14 @@ public class BasePage {
     public WebElement getWebElement(WebDriver driver, String xpathExpression){
         return driver.findElement(getByxPath(xpathExpression));
     }
+    public WebElement getWebElement(WebDriver driver, String xpathExpression, String... values){
+        return driver.findElement(getByxPath(getDynamicXpath(xpathExpression,values)));
+    }
     public List<WebElement> getWebElements(WebDriver driver, String xpathExpression){
         return driver.findElements(getByxPath(xpathExpression));
+    }
+    public List<WebElement> getWebElements(WebDriver driver, String xpathExpression, String... values){
+        return driver.findElements(getByxPath(getDynamicXpath(xpathExpression,values)));
     }
     public void clickToElement(WebDriver driver, String xpathExpression){
         getWebElement(driver,xpathExpression).click();
@@ -103,15 +109,22 @@ public class BasePage {
     public void clickToElement(WebDriver driver, String xpathExpression, String... values){
         getWebElement(driver,getDynamicXpath(xpathExpression,values)).click();
     }
-    public void sendKeyToElement(WebDriver driver, String xpathExpression, String value){
+    public void sendKeyToElement(WebDriver driver, String xpathExpression, String sendvalue){
         getWebElement(driver,xpathExpression).clear();
-        getWebElement(driver,xpathExpression).sendKeys(value);
+        getWebElement(driver,xpathExpression).sendKeys(sendvalue);
+    }
+    public void sendKeyToElement(WebDriver driver, String xpathExpression, String sendvalue, String... values){
+        getWebElement(driver,xpathExpression,values).clear();
+        getWebElement(driver,xpathExpression,values).sendKeys(sendvalue);
     }
     public String getElementText(WebDriver driver, String xpathExpression){
         return getWebElement(driver,xpathExpression).getText();
     }
     public void selectItemInDefaultDropdown(WebDriver driver, String xpathExpression, String itemText){
         new Select(getWebElement(driver,xpathExpression)).selectByVisibleText(itemText);
+    }
+    public void selectItemInDefaultDropdown(WebDriver driver, String xpathExpression, String itemText, String...dynamicValues){
+        new Select(getWebElement(driver,xpathExpression, dynamicValues)).selectByVisibleText(itemText);
     }
     public String getSelectedTextInDefaultDropdown(WebDriver driver, String xpathExpression){
         return new Select(getWebElement(driver, xpathExpression)).getFirstSelectedOption().getText();
@@ -160,11 +173,20 @@ public class BasePage {
     public boolean isElementDisplayed(WebDriver driver, String xpathExpression){
         return getWebElement(driver, xpathExpression).isDisplayed();
     }
+    public boolean isElementDisplayed(WebDriver driver, String xpathExpression, String... values){
+        return getWebElement(driver, xpathExpression, values).isDisplayed();
+    }
     public boolean isElementEnable(WebDriver driver, String xpathExpression){
         return getWebElement(driver, xpathExpression).isEnabled();
     }
+    public boolean isElementEnable(WebDriver driver, String xpathExpression, String... values){
+        return getWebElement(driver, xpathExpression, values).isEnabled();
+    }
     public boolean isElementSelected(WebDriver driver, String xpathExpression){
         return getWebElement(driver, xpathExpression).isSelected();
+    }
+    public boolean isElementSelected(WebDriver driver, String xpathExpression, String... values){
+        return getWebElement(driver, xpathExpression, values).isSelected();
     }
     public void switchToFrame(WebDriver driver, String xpathExpression){
         driver.switchTo().frame(getWebElement(driver,xpathExpression));
@@ -174,6 +196,9 @@ public class BasePage {
     }
     public void hoverMouseToElement(WebDriver driver, String xpathExpression){
         new Actions(driver).moveToElement(getWebElement(driver,xpathExpression)).perform();
+    }
+    public void pressKeyToElement(WebDriver driver, String xpathExpression, Keys key){
+        new Actions(driver).sendKeys(getWebElement(driver,xpathExpression),key).perform();
     }
     public void pressKeyboardToElement(WebDriver driver, String xpathExpression, Keys key){
         new Actions(driver).sendKeys(getWebElement(driver, xpathExpression)).perform();
@@ -234,12 +259,8 @@ public class BasePage {
         return explicitWait.until(jQueryLoad) && explicitWait.until(jsLoad);
     }
     public boolean isImageLoaded(WebDriver driver, String xpathExpression){
-        boolean status = (boolean) ((JavascriptExecutor) driver).executeScript("return arguments[0].complete && typeof arguments[0].naturalWidth != \"undefined\" && arguments[0].natualWidth > 0", getWebElement(driver, xpathExpression));
-        if (status){
-            return true;
-        } else {
-            return false;
-        }
+        boolean status = (boolean) ((JavascriptExecutor) driver).executeScript("return arguments[0].complete && typeof arguments[0].naturalWidth != 'undefined' && arguments[0].natualWidth > 0", getWebElement(driver, xpathExpression));
+        return status;
     }
     public void waitForElementVisible(WebDriver driver, String xpathExpression){
         new WebDriverWait(driver, Duration.ofSeconds(longTimeout)).until(ExpectedConditions.visibilityOfElementLocated(getByxPath(xpathExpression)));
@@ -253,17 +274,35 @@ public class BasePage {
     public void waitForElementInvisible(WebDriver driver, String xpathExpression){
         new WebDriverWait(driver, Duration.ofSeconds(longTimeout)).until(ExpectedConditions.invisibilityOfElementLocated(getByxPath(xpathExpression)));
     }
+    public void waitForElementInvisible(WebDriver driver, String xpathExpression, String... values){
+        new WebDriverWait(driver, Duration.ofSeconds(longTimeout)).until(ExpectedConditions.invisibilityOfElementLocated(getByxPath(getDynamicXpath(xpathExpression,values))));
+    }
     public void waitForAllElementsVisible(WebDriver driver, String xpathExpression){
         new WebDriverWait(driver, Duration.ofSeconds(longTimeout)).until(ExpectedConditions.visibilityOfAllElementsLocatedBy(getByxPath(xpathExpression)));
     }
+    public void waitForAllElementsVisible(WebDriver driver, String xpathExpression, String... values){
+        new WebDriverWait(driver, Duration.ofSeconds(longTimeout)).until(ExpectedConditions.visibilityOfAllElementsLocatedBy(getByxPath(getDynamicXpath(xpathExpression,values))));
+    }
     public void waitForAllElementsInvisible(WebDriver driver, String xpathExpression){
         new WebDriverWait(driver, Duration.ofSeconds(longTimeout)).until(ExpectedConditions.invisibilityOfAllElements(getWebElements(driver,xpathExpression)));
+    }
+    public void waitForAllElementsInvisible(WebDriver driver, String xpathExpression, String... values){
+        new WebDriverWait(driver, Duration.ofSeconds(longTimeout)).until(ExpectedConditions.invisibilityOfAllElements(getWebElements(driver, xpathExpression, values)));
     }
     public void openPageAtMyAccountByPageName(WebDriver driver, String... values){
         waitForElementClickable(driver, BasePageUI.DYNAMIC_PAGES_AT_MYACCOUNT_AREA, values);
         clickToElement(driver,BasePageUI.DYNAMIC_PAGES_AT_MYACCOUNT_AREA, values);
     }
-    private long longTimeout = 30;
+    public void uploadMultipleFiles(WebDriver driver, String... fileNames){
+        String filePath = GlobalConstants.UPLOADFILE;
+        String fullFileName = "";
+        for (String file : fileNames){
+            fullFileName = fullFileName + filePath + file + "\n";
+        }
+        fullFileName = fullFileName.trim();
+        getWebElement(driver, BasePageUI.UPLOAD_FILE).sendKeys(fullFileName);
+    }
+    private long longTimeout = GlobalConstants.LONG_TIMEOUT;
     public void sleepInSecond(long timeoutInSecond){
         try {
             Thread.sleep(timeoutInSecond*1000);
