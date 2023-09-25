@@ -31,28 +31,40 @@ public class Topic_08_Register_login_SwitchPage_DynamicLocator extends BaseTest 
     }
     @Test
     public void TC_01_Register(){
+        log.info("Register - Step01: Open Register link");
         registerPage= homePage.clickToRegisterLink();
+
+        log.info("Register - Step02: Input data to Register new Account " + firstName + lastName + email + passWord);
         registerPage.registerNewAccount(firstName, lastName, email, passWord);
         //Assert.assertEquals(registerPage.getRegisteredMessage(),"Wrong email");
     }
 
     @Test
     public void TC_02_Login_Page_SwitchPageByDynamicXpath(){
+        log.info("Login - Step01: Open Register link");
         loginPage = homePage.clickToLoginLink();
+
+        log.info("Login - Step02: Input data to login" + email + passWord);
         loginPage.loginToPage(email,passWord);
+
+        log.info("Login - Step03: Click button Login");
         loginPage.clickToMyAccount();
+
+        log.info("Login - Step04: Open Page Customer info");
         loginPage.openPageAtMyAccountByPageName(driver,"Customer info");
         customerInfo = PageGeneratorManager.getCustomerInfoPage(driver);
 
+        log.info("Login - Step05: Open Page Reward points");
         customerInfo.openPageAtMyAccountByPageName(driver, "Reward points");
         rewardPoint =PageGeneratorManager.getRewardPointObject(driver);
 
+        log.info("Login - Step06: Open Page Customer info");
         rewardPoint.openPageAtMyAccountByPageName(driver,"Customer info");
         customerInfo = PageGeneratorManager.getCustomerInfoPage(driver);
     }
 
     @AfterClass
     public void afterClass(){
-        //driver.close();
+        driver.close();
     }
 }

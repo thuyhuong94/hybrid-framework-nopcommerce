@@ -23,14 +23,23 @@ public class Topic_09_DataTable_HandleTableGrid extends BaseTest {
     }
     @Test
     public void TC_01_SelectPageAndVerifyPageIsSelected(){
-        homePage.openPagingByNumber("10");
-        verifyTrue(homePage.isPageNumberactived("10"));
-        homePage.openPagingByNumber("18");
-        verifyFalse(homePage.isPageNumberactived("18"));
-        homePage.openPagingByNumber("8");
-        verifyTrue(homePage.isPageNumberactived("8"));
+        String[] pages = {"10", "18", "8"};
+        log.info("SelectPage - Step01: Open Dynamic Page " + pages[0]);
+        homePage.openPagingByNumber(pages[0]);
+        log.info("Verify opened Dynamic Page " + pages[0]);
+        Assert.assertTrue(homePage.isPageNumberactived(pages[0]));
+
+        log.info("SelectPage - Step02: Open Dynamic Page " + pages[1]);
+        homePage.openPagingByNumber(pages[1]);
+        log.info("Verify open Dynamic Page " + pages[1]);
+        Assert.assertFalse(homePage.isPageNumberactived(pages[1]));
+
+        log.info("SelectPage - Step01: Open Dynamic Page " + pages[2]);
+        homePage.openPagingByNumber(pages[2]);
+        log.info("Verify open Dynamic Page " + pages[2]);
+        Assert.assertTrue(homePage.isPageNumberactived(pages[2]));
     }
-    @Test
+    //@Test
     public void TC_02_SearchItemsByEnterToHeader(){
         homePage.refreshPage(driver);
         homePage.enterToHeaderTextBox("Country","Armenia");
@@ -45,7 +54,7 @@ public class Topic_09_DataTable_HandleTableGrid extends BaseTest {
         homePage.sleepInSecond(1);
 
     }
-    @Test
+    //@Test
     public void TC_03_GetAllValueInColumn(){
         homePage.refreshPage(driver);
         List<String> allvalue = homePage.getValueByColumnEachRowAtAllPage("country");

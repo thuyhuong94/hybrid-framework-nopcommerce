@@ -1,6 +1,7 @@
 package pageObjectsjQuery;
 
 import commons.BasePage;
+import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import pageUIsjQuery.HomePageUI;
@@ -14,6 +15,7 @@ public class HomePageObject extends BasePage {
         this.driver = driver;
     }
 
+    @Step ("Open Page by Number {0}")
     public void openPagingByNumber(String pageNumber) {
         waitForElementClickable(driver, HomePageUI.PAGINATION_PAGE_BY_NUMBER,pageNumber);
         clickToElement(driver, HomePageUI.PAGINATION_PAGE_BY_NUMBER,pageNumber);
@@ -22,7 +24,7 @@ public class HomePageObject extends BasePage {
         waitForAllElementsVisible(driver, HomePageUI.PAGINATION_PAGE_ACTIVED_BY_NUMBER, pageNumber);
         return isElementDisplayed(driver, HomePageUI.PAGINATION_PAGE_ACTIVED_BY_NUMBER, pageNumber);
     }
-
+    @Step("Input value {1} to header {0}")
     public void enterToHeaderTextBox(String header, String sendvalue) {
         waitForAllElementsVisible(driver, HomePageUI.HEADER_TEXTBOX_BY_LABEL, header);
         sendKeyToElement(driver, HomePageUI.HEADER_TEXTBOX_BY_LABEL,sendvalue, header);

@@ -1,4 +1,5 @@
 package commons;
+import io.qameta.allure.Step;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.Color;
@@ -32,6 +33,7 @@ public class BasePage {
     public void backToPage(WebDriver driver){
         driver.navigate().back();
     }
+    @Step("Reload Page")
     public void refreshPage(WebDriver driver){
         driver.navigate().refresh();
     }
@@ -176,6 +178,33 @@ public class BasePage {
     public boolean isElementDisplayed(WebDriver driver, String xpathExpression, String... values){
         return getWebElement(driver, xpathExpression, values).isDisplayed();
     }
+    public void overrideImplicitTimeout (WebDriver driver, long timeOut){
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(timeOut));
+    }
+    public boolean isElementUndisplayed(WebDriver driver, String xpathExpression){
+        overrideImplicitTimeout(driver,shortTimeout);
+        List<WebElement> elements = getWebElements(driver, xpathExpression);
+        overrideImplicitTimeout(driver, longTimeout);
+        if (elements.size() == 0){
+            return true;
+        } else if (elements.size()>0 && !elements.get(0).isDisplayed()){
+            return true;
+        }else {
+            return false;
+        }
+    }
+    public boolean isElementUndisplayed(WebDriver driver, String xpathExpression, String... dynamicValues){
+        overrideImplicitTimeout(driver,shortTimeout);
+        List<WebElement> elements = getWebElements(driver, xpathExpression, dynamicValues);
+        overrideImplicitTimeout(driver, longTimeout);
+        if (elements.size() == 0){
+            return true;
+        } else if (elements.size()>0 && !elements.get(0).isDisplayed()){
+            return true;
+        }else {
+            return false;
+        }
+    }
     public boolean isElementEnable(WebDriver driver, String xpathExpression){
         return getWebElement(driver, xpathExpression).isEnabled();
     }
@@ -302,6 +331,7 @@ public class BasePage {
         fullFileName = fullFileName.trim();
         getWebElement(driver, BasePageUI.UPLOAD_FILE).sendKeys(fullFileName);
     }
+    private long shortTimeout = GlobalConstants.SHORT_TIMEOUT;
     private long longTimeout = GlobalConstants.LONG_TIMEOUT;
     public void sleepInSecond(long timeoutInSecond){
         try {
