@@ -7,8 +7,8 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
-import pageObects.HomePageObject;
-import pageObects.RegisterPageObject;
+import pageObjects.HomePageObject;
+import pageObjects.RegisterPageObject;
 
 public class Topic_06_Register_login_PageGeneratorManager_PartI extends BaseTest {
     private WebDriver driver;

@@ -11,7 +11,7 @@
     <test name="Run on Firefox">
         <parameter name="browser" value="firefox"/>
             <classes>
-                <class name="com.nopcommerce.user.Topic_08_Register_login_SwitchPage_DynamicLocator"/>
+                <class name="com.nopcommerce.user.Topic_12_Page_Element_Component_PattenObject"/>
             </classes>
     </test>
 </suite>

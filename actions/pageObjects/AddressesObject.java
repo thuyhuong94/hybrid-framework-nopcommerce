@@ -1,11 +1,11 @@
-package pageObects;
+package pageObjects;
 
 import commons.BasePage;
 import org.openqa.selenium.WebDriver;
 
-public class CustomerPageObject extends BasePage {
+public class AddressesObject extends BasePage {
     private WebDriver driver;
-    public CustomerPageObject(WebDriver driver){
+    public AddressesObject(WebDriver driver){
         this.driver = driver;
     }
 }

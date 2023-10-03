@@ -13,6 +13,7 @@ public class RegisterPageUI {
     public static final String CONFIRM_PASSWORD_TEXTBOX = "//input[@id='ConfirmPassword']";
     public static final String REGISTER_BUTTON = "//button[@id='register-button']";
     public static final String REGISTER_MESSAGE = "//div[contains(@class, 'message-error')]//li";
+    public static final String REGISTER_RESULT = "//div[@class='result']";
 
 
 }

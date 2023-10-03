@@ -1,11 +1,9 @@
 package com.jQuery.dataTable;
 
 import commons.BaseTest;
-import commons.GlobalConstants;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.*;
-import pageObects.*;
 import pageObjectsjQuery.HomePageObject;
 import pageObjectsjQuery.PageGeneratorManager;
 

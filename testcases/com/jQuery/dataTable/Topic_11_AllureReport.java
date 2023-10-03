@@ -46,8 +46,8 @@ public class Topic_11_AllureReport extends BaseTest {
         homePage.enterToHeaderTextBox("Total","32487");
         homePage.sleepInSecond(1);
     }
-    @AfterClass
+    @AfterClass (alwaysRun = true)
     public void afterClass(){
-        driver.close();
+        closeBrowserDriver();
     }
 }

@@ -1,10 +1,8 @@
-package pageObects;
+package pageObjects;
 
 import commons.BasePage;
 import org.openqa.selenium.WebDriver;
 import pageUIs.RegisterPageUI;
-
-import java.util.prefs.BackingStoreException;
 
 public class RegisterPageObject extends BasePage {
     private WebDriver driver;
@@ -42,6 +40,10 @@ public class RegisterPageObject extends BasePage {
     public String getRegisteredMessage() {
         waitForElementVisible(driver, RegisterPageUI.REGISTER_MESSAGE);
         return getElementText(driver, RegisterPageUI.REGISTER_MESSAGE);
+    }
+    public String getRegisteredResult() {
+        waitForElementVisible(driver, RegisterPageUI.REGISTER_RESULT);
+        return getElementText(driver, RegisterPageUI.REGISTER_RESULT);
     }
 
     public void sendkeyToFirstNameTextbox(String firstName) {

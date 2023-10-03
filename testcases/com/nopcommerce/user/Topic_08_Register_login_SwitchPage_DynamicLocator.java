@@ -6,7 +6,7 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
-import pageObects.*;
+import pageObjects.*;
 import commons.PageGeneratorManager;
 
 public class Topic_08_Register_login_SwitchPage_DynamicLocator extends BaseTest {

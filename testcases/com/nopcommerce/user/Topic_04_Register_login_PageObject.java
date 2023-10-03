@@ -1,14 +1,13 @@
 package com.nopcommerce.user;
 
-import commons.BasePage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-import pageObects.HomePageObject;
-import pageObects.RegisterPageObject;
+import pageObjects.HomePageObject;
+import pageObjects.RegisterPageObject;
 
 import java.time.Duration;
 

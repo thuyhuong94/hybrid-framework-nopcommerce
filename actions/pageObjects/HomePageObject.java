@@ -1,4 +1,4 @@
-package pageObects;
+package pageObjects;
 
 import commons.BasePage;
 import commons.PageGeneratorManager;
