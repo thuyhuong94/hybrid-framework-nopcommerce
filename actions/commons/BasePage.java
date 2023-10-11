@@ -7,6 +7,8 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import pageObjects.wordpress.PageGeneratorManager;
+import pageObjects.wordpress.UserHomePO;
 import pageUIs.BasePageUI;
 import pageUIs.LogInPageUI;
 
@@ -24,6 +26,7 @@ public class BasePage {
     public String getPageTitle(WebDriver driver){
         return driver.getTitle();
     }
+    @Step("Get current page url")
     public String getPageUrl(WebDriver driver){
         return driver.getCurrentUrl();
     }
@@ -178,6 +181,9 @@ public class BasePage {
     public int getElementsSize(WebDriver driver, String xpathExpression){
         return getWebElements(driver, xpathExpression).size();
     }
+    public int getElementsSize(WebDriver driver, String xpathExpression, String... values){
+        return getWebElements(driver, xpathExpression, values).size();
+    }
     public void checkToRadioOrCheckbox(WebDriver driver, String xpathExpression){
         if (!getWebElement(driver, xpathExpression).isSelected()){
             getWebElement(driver, xpathExpression).click();
@@ -315,6 +321,9 @@ public class BasePage {
     public void waitForElementVisible(WebDriver driver, String xpathExpression){
         new WebDriverWait(driver, Duration.ofSeconds(longTimeout)).until(ExpectedConditions.visibilityOfElementLocated(getByLocator(xpathExpression)));
     }
+    public void waitForElementVisible(WebDriver driver, String xpathExpression, String... value){
+        new WebDriverWait(driver, Duration.ofSeconds(longTimeout)).until(ExpectedConditions.visibilityOfElementLocated(getByLocator(getDynamicXpath(xpathExpression,value))));
+    }
     public void waitForElementClickable(WebDriver driver, String xpathExpression){
         new WebDriverWait(driver, Duration.ofSeconds(longTimeout)).until(ExpectedConditions.elementToBeClickable(getByLocator(xpathExpression)));
     }
@@ -389,4 +398,8 @@ public class BasePage {
         }
     }
 
+    public UserHomePO openEndUserSite(WebDriver driver, String userUrl) {
+        openUrl(driver,userUrl);
+        return PageGeneratorManager.getUserHomePage(driver);
+    }
 }

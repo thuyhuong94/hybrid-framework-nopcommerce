@@ -1,10 +1,14 @@
 package commons;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
+import io.qameta.allure.Step;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.Assert;
 import org.testng.Reporter;
@@ -13,6 +17,8 @@ import org.testng.annotations.BeforeSuite;
 import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
+import java.util.Collections;
+import java.util.Random;
 
 public class BaseTest {
     private WebDriver driver;
@@ -25,6 +31,7 @@ public class BaseTest {
     protected BaseTest(){
         log = LogFactory.getLog(getClass());
     }
+    @Step("Open WebBrowser {0}")
     protected WebDriver getBrowserDriver(String browserName){
         BrowserList browser = BrowserList.valueOf(browserName.toUpperCase());
         switch (browser){
@@ -33,7 +40,7 @@ public class BaseTest {
                 driver = new FirefoxDriver();
                 break;
             case CHROME:
-                WebDriverManager.chromedriver().setup();
+                WebDriverManager.chromedriver().driverVersion("117.0.5938.149").setup();
                 driver = new ChromeDriver();
                 break;
             default:
@@ -43,15 +50,38 @@ public class BaseTest {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(GlobalConstants.LONG_TIMEOUT));
         return driver;
     }
+    @Step("Open page by Url {1}")
+    protected WebDriver getBrowserDriver(String browserName, String urlValue){
+        BrowserList browser = BrowserList.valueOf(browserName.toUpperCase());
+        switch (browser){
+            case FIREFOX:
+                WebDriverManager.firefoxdriver().setup();
+                driver = new FirefoxDriver();
+                break;
+            case CHROME:
+                WebDriverManager.chromedriver().setup();
+                ChromeOptions options = new ChromeOptions();
+                options.setExperimentalOption("useAutomationExtension",false);
+                options.setExperimentalOption("excludeSwitches", Collections.singletonList("enable-automation"));
+                driver = new ChromeDriver(options);
+                break;
+            default:
+                throw new RuntimeException("This browser is not support");
+        }
+        driver.manage().window().maximize();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(GlobalConstants.LONG_TIMEOUT));
+        driver.get(urlValue);
+        return driver;
+    }
 
     protected void closeBrowserDriver() {
         String cmd = null;
         try {
             String osName = System.getProperty("os.name").toLowerCase();
-            log.info("OS name = " + osName);
+            //log.info("OS name = " + osName);
 
             String driverInstanceName = driver.toString().toLowerCase();
-            log.info("Driver instance name = " + driverInstanceName);
+            //log.info("Driver instance name = " + driverInstanceName);
 
             String browserDriverName = null;
 
@@ -151,5 +181,37 @@ public class BaseTest {
         } catch (Exception e) {
             System.out.print(e.getMessage());
         }
+    }
+
+    public int generateFakeNumber (){
+        Random rand = new Random();
+        return rand.nextInt(99999);
+    }
+    protected String getCurrentDay() {
+        DateTime nowUTC = new DateTime(DateTimeZone.UTC);
+        int day = nowUTC.getDayOfMonth();
+        if (day < 10) {
+            String dayValue = "0" + day;
+            return dayValue;
+        }
+        return day + "";
+    }
+
+    protected String getCurrentMonth() {
+        DateTime now = new DateTime(DateTimeZone.UTC);
+        int month = now.getMonthOfYear();
+        if (month < 10) {
+            String monthValue = "0" + month;
+            return monthValue;
+        }
+        return month + "";
+    }
+
+    protected String getCurrentYear() {
+        DateTime now = new DateTime(DateTimeZone.UTC);
+        return now.getYear() + "";
+    }
+    protected String getToday() {
+        return getCurrentDay() + "/" + getCurrentMonth() + "/" + getCurrentYear();
     }
 }
